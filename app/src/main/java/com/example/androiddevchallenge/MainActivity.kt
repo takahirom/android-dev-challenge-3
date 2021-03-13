@@ -19,7 +19,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -37,14 +36,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.view.WindowCompat
@@ -123,12 +118,12 @@ fun WelcomeScreen(onLogin: () -> Unit) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(start = 16.dp, end= 16.dp)
+                        .padding(start = 16.dp, end = 16.dp)
                         .constrainAs(box) {
-                        top.linkTo(image.bottom, 48.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }) {
+                            top.linkTo(image.bottom, 48.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_light_logo),
                         "logo",
@@ -141,21 +136,14 @@ fun WelcomeScreen(onLogin: () -> Unit) {
                         style = MaterialTheme.typography.subtitle1,
                         textAlign = TextAlign.End,
                         modifier = Modifier
-                            .firstBaselineToTop(32.dp)
+                            .paddingFromBaseline(
+                                top = 32.dp,
+                                bottom = 40.dp
+                            )
 
                     )
-                    Button(
-                        { onLogin() },
-                        modifier = Modifier
-                            .height(48.dp)
-                            .firstBaselineToTop(40.dp)
-                            .fillMaxWidth()
-                        ,
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
-                    ) {
-                        Text(text = "Create account")
-                    }
+                    val text = "Create account"
+                    MyButton(onLogin, text)
                 }
                 Text(text = "Log in", modifier = Modifier
                     .clickable { onLogin() }
@@ -169,6 +157,20 @@ fun WelcomeScreen(onLogin: () -> Unit) {
     }
 }
 
+@Composable
+fun MyButton(onClick: () -> Unit, text: String) {
+    Button(
+        { onClick() },
+        modifier = Modifier
+            .height(48.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
+    ) {
+        Text(text = text)
+    }
+}
+
 @Preview(widthDp = 360, heightDp = 640)
 @Composable
 fun PreviewWelcome() {
@@ -177,36 +179,7 @@ fun PreviewWelcome() {
     }
 }
 
-fun Modifier.firstBaselineToTop(
-    firstBaselineToTop: Dp
-): Modifier = Modifier.layout { measurable, constraints ->
-    // Measure the composable
-    val placeable = measurable.measure(constraints)
 
-    // Check the composable has a first baseline
-    check(placeable[FirstBaseline] != AlignmentLine.Unspecified)
-    val firstBaseline = placeable[FirstBaseline]
-
-    // Height of the composable with padding - first baseline
-    val placeableY = firstBaselineToTop.toPx() - firstBaseline
-    val height = placeable.height + placeableY
-    layout(placeable.width, height.toInt()) {
-        // Where the composable gets placed
-        placeable.placeRelative(0, placeableY.toInt())
-    }
-}
-
-@Composable
-fun LoginScreen(onHome: () -> Unit) {
-    Button({ onHome() }) {
-        Text(text = "Login")
-    }
-}
-
-@Composable
-fun HomeScreen() {
-    Text(text = "")
-}
 
 
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
