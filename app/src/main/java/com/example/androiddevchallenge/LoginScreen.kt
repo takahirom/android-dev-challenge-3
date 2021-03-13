@@ -1,13 +1,31 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -21,9 +39,11 @@ import com.example.androiddevchallenge.ui.theme.MyTheme
 
 @Composable
 fun LoginScreen(onHome: () -> Unit) {
-    Surface {
+    Surface(color = MaterialTheme.colors.background) {
         Column(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+                .fillMaxSize()
         ) {
             Text(
                 modifier = Modifier
@@ -33,30 +53,12 @@ fun LoginScreen(onHome: () -> Unit) {
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.h1
             )
-            TextField(
-                "",
-                placeholder = {
-                    Text(
-                        text = "Email address",
-                        style = MaterialTheme.typography.body1
-                    )
-                },
-                onValueChange = { },
-                modifier = Modifier
-                    .fillMaxWidth()
+            Form(
+                text = "Email address"
             )
-            TextField(
-                "",
-                placeholder = {
-                    Text(
-                        text = "Password (8+ charactors",
-                        style = MaterialTheme.typography.body1
-                    )
-                },
-                onValueChange = { },
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth()
+            Spacer(modifier = Modifier.height(8.dp))
+            Form(
+                text = "Password (8+ charactors"
             )
             Text(
                 modifier = Modifier
@@ -93,10 +95,37 @@ fun LoginScreen(onHome: () -> Unit) {
     }
 }
 
+@Composable
+private fun Form(text: String) {
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp),
+        value = text,
+        onValueChange = { s: String -> },
+        placeholder = {
+            Text(
+                text = text,
+                color = MaterialTheme.colors.onPrimary,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
+    )
+}
+
 @Preview(widthDp = 360, heightDp = 640)
 @Composable
 fun PreviewLogin() {
     MyTheme {
+        LoginScreen(onHome = { /*TODO*/ })
+    }
+}
+
+@Preview(widthDp = 360, heightDp = 640)
+@Composable
+fun PreviewLoginDark() {
+    MyTheme(true) {
         LoginScreen(onHome = { /*TODO*/ })
     }
 }

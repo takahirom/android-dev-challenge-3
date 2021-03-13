@@ -28,7 +28,7 @@ val typography = Typography(
     h1 = TextStyle(
         fontFamily = FontFamily(listOf(Font(R.font.nunitosans_bold))),
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp
+        fontSize = 18.sp,
     ),
     h2 = TextStyle(
         fontFamily = FontFamily(listOf(Font(R.font.nunitosans_bold))),

@@ -93,7 +93,7 @@ fun WelcomeScreen(onLogin: () -> Unit) {
     Surface(color = MaterialTheme.colors.primary) {
         Box {
             Image(
-                painter = painterResource(id = R.drawable.ic_light_welcome_bg),
+                painter = painterResource(id = R.drawable.ic_welcome_bg),
                 "background",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
@@ -103,7 +103,7 @@ fun WelcomeScreen(onLogin: () -> Unit) {
             ) {
                 val (image, box, login) = createRefs()
                 Image(
-                    painter = painterResource(id = R.drawable.ic_light_welcome_illos),
+                    painter = painterResource(id = R.drawable.ic_welcome_illos),
                     "illos",
                     modifier = Modifier
                         .padding(
@@ -123,12 +123,12 @@ fun WelcomeScreen(onLogin: () -> Unit) {
                             top.linkTo(image.bottom, 48.dp)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
-                        }) {
+                        }
+                ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_light_logo),
+                        painter = painterResource(id = R.drawable.ic_logo),
                         "logo",
                         modifier = Modifier
-
 
                     )
                     Text(
@@ -143,15 +143,19 @@ fun WelcomeScreen(onLogin: () -> Unit) {
 
                     )
                     val text = "Create account"
-                    MyButton(onLogin, text)
+                    MyButton({}, text)
                 }
-                Text(text = "Log in", modifier = Modifier
-                    .clickable { onLogin() }
-                    .constrainAs(login) {
-                        top.linkTo(box.bottom, 8.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    })
+                Text(
+                    text = "Log in",
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .clickable { onLogin() }
+                        .constrainAs(login) {
+                            top.linkTo(box.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                )
             }
         }
     }
@@ -167,7 +171,10 @@ fun MyButton(onClick: () -> Unit, text: String) {
         shape = RoundedCornerShape(24.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
     ) {
-        Text(text = text)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.button
+        )
     }
 }
 
@@ -179,21 +186,10 @@ fun PreviewWelcome() {
     }
 }
 
-
-
-
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
     MyTheme(darkTheme = true) {
-        MyApp()
+        WelcomeScreen(onLogin = { /*TODO*/ })
     }
 }
